@@ -3,18 +3,19 @@ import Contacts from './Contacts/Contacts';
 import { nanoid } from 'nanoid';
 import PhoneBook from './PhoneBook/PhoneBook';
 
+const BaseContact = [
+  {
+    id: 'id-1',
+    name: 'Rosie Simpson',
+    number: '459-12-56',
+  },
+  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+];
 export default class App extends Component {
   state = {
-    contacts: [
-      {
-        id: 'id-1',
-        name: 'Rosie Simpson',
-        number: '459-12-56',
-      },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
   };
   checkList = e => {
     const name = e.target.name.value;
@@ -25,7 +26,7 @@ export default class App extends Component {
         inListContact = true;
       }
     });
-    
+
     return inListContact;
   };
   handleDeleteContact = id => {
@@ -55,6 +56,17 @@ export default class App extends Component {
       }));
     }
   };
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem("contacts"))|| BaseContact
+    console.log(JSON.parse(localStorage.getItem("contacts")))
+    this.setState({contacts})
+  }
+  componentDidUpdate(_, prevState){
+   
+    if(prevState.contacts.length !== this.state.contacts.length){
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
+  }
   render() {
     return (
       <>
